@@ -19,13 +19,19 @@ class PCA:
         return self.Vt.T
 
     # Project data onto the principal components
-    def transform(self, num_components=None):
-        if num_components is None:
-            num_components = self.Vt.shape[0]  # Default to all components
+    def transform(self, first, second):
+        # Convert inputs to integers to use them as indices
+        first = int(first) - 1  
+        second = int(second) - 1
         
-        # Select the top `num_components` principal components
-        selected_components = self.Vt[:num_components]
+        # Ensure the provided components are within valid bounds
+        if first < 0 or first >= self.Vt.shape[0] or second < 0 or second >= self.Vt.shape[0]:
+            raise ValueError("Invalid principal component indices")
         
-        # Project the data onto the selected components
+        # Select the corresponding principal component vectors (columns) from Vt
+        selected_components = self.Vt[[first, second], :]
+        
+        # Project the data onto the selected principal components
         projected_data = np.dot(self.features, selected_components.T)
+        
         return projected_data

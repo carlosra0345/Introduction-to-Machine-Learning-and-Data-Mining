@@ -2,58 +2,46 @@ from ucimlrepo import fetch_ucirepo
 from PCA import PCA
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.linalg import svd
+from variance_explained import*
+from variance_coef import*
+from principle_components import*
+from pearplot import*
+from multiplot import*
+import seaborn as sns
+import pandas as pd
 
-figure_file = 'figures/' + input('Enter name of file to save figure: ')
-num_desired_components = int(input('Enter desired number of components to reduce to: '))
-
-  
 # fetch dataset 
 glass_identification = fetch_ucirepo(id=42) 
   
 # data (as pandas dataframes) 
-X = glass_identification.data.features 
+X = glass_identification.data.features
 targets = np.concatenate(glass_identification.data.targets.to_numpy())
+N, M = X.shape
 
+# get the PCA of the normalized matrix
 pca = PCA(X)
 
-projected_data = pca.transform(num_components=num_desired_components)
+# compute SVD of X
+U, S, V = pca.U, pca.S, pca.Vt
 
-# Create a color map based on unique targets
-unique_targets = np.unique(targets)
-colors = plt.cm.viridis(np.linspace(0, 1, len(unique_targets)))  # Create a color map
-target_color_map = {target: color for target, color in zip(unique_targets, colors)}
+# compute variance explained by principal components
+rho = (S * S) / (S * S).sum()
+cumulative_rho = np.cumsum(rho)
+threshold = 0.9
 
-# Map targets to colors
-target_colors = np.array([target_color_map[target] for target in targets])
+# compute how many principle componants needed for 90% and 95% variance
+components_90 = np.argmax(cumulative_rho >= 0.90) + 1
+components_95 = np.argmax(cumulative_rho >= 0.95) + 1
+attributeNames = X.columns.tolist()
 
-# Create a scatter plot with the mapped colors
-plt.figure(figsize=(10, 8))
-plt.scatter(projected_data.T[0], projected_data.T[1], c=target_colors, edgecolor='k', s=100)
+first_PC = input('Enter the first principle component: ')
+second_PC = input('Enter the second principle component: ')
 
-# Add a title and labels
-plt.title('PCA of Glass Identification Dataset')
-plt.xlabel('Principal Component 1')
-plt.ylabel('Principal Component 2')
-plt.grid(True)
+principal_components(first_PC, second_PC, pca, targets)
+variance_explained(rho, cumulative_rho, threshold)
+variance_coef(V, components_90, attributeNames)
+pearplot(pca, targets, 5)
+multiplot(X, attributeNames, pca, N, targets)
 
-# Create a custom legend for unique targets
-handles = [plt.Line2D([0], [0], marker='o', color='w', label=str(target), 
-                       markerfacecolor=target_color_map[target], markersize=10) 
-           for target in unique_targets]
-plt.legend(handles=handles, title='Targets', loc='best')
-
-# Save the plot
-plt.savefig(figure_file)
-
-summ = 0
-for n in pca.S:
-   summ += n*n 
-var = []
-for i in range(1,10):
-    temp = 0
-    for num in pca.S[:i]:
-        temp += num*num
-    var.append(temp/summ)
-    
-plt.plot(var)
-plt.savefig('figures/fraction-thingy.png')
+plt.show()
