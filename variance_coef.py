@@ -26,7 +26,7 @@ def variance_coef(V, components_90, attribute_names):
     plt.xticks(r + bw * (len(pcs) - 1) / 2, attribute_names)  
     plt.xlabel("Attributes", fontsize=12)
     plt.ylabel("Component Coefficients", fontsize=12)
-    plt.title("NanoNose: PCA Component Coefficients", fontsize=14)
+    plt.title("Glass Indentification: PCA Component Coefficients", fontsize=14)
     
     # Improve legend placement
     plt.legend(title="Principal Components", loc='upper left', bbox_to_anchor=(1, 1), fontsize='small')  # Adjust the coordinates as needed

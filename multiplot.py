@@ -29,7 +29,7 @@ def multiplot(X, attributeNames, pca, N, targets):
     # Make the plot
     plt.figure(figsize=(15, 10))  # Adjusted size for better spacing
     plt.subplots_adjust(hspace=0.4, wspace=0.4)  # Adjust spacing between subplots
-    plt.title("NanoNose: Effect of Standardization")
+    plt.title("Glass Identification: Effect of Standardization")
 
     for k in range(2):
         # Obtain the PCA solution by calculating the SVD of either Y1 or Y2
