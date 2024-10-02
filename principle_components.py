@@ -9,7 +9,7 @@ def principal_components(first_PC, second_PC, pca, targets):
 
     # Create a color map based on unique targets
     unique_targets = np.unique(targets)
-    colors = plt.cm.plasma(np.linspace(0, 1, len(unique_targets)))  # Create a color map
+    colors = plt.cm.cividis(np.linspace(0, 1, len(unique_targets)))  # Create a color map
     target_color_map = {target: color for target, color in zip(unique_targets, colors)}
 
     # Map targets to colors

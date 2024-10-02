@@ -43,3 +43,5 @@ variance_explained(rho, cumulative_rho, threshold)
 variance_coef(V, components_90, attributeNames)
 pearplot(pca, targets, 5)
 multiplot(X, attributeNames, pca, N, targets)
+
+plt.show()

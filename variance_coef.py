@@ -12,7 +12,7 @@ def variance_coef(V, components_90, attribute_names):
     legendStrs = ["PC" + str(e + 1) for e in pcs]
     
     # Define a color palette
-    colors = sns.color_palette("plasma", n_colors=len(pcs))
+    colors = sns.color_palette("cividis", n_colors=len(pcs))
     
     bw = 0.1  # Width of the bars
     r = np.arange(1, len(attribute_names) + 1)  # Adjust based on the number of attributes

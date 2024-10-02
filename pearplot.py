@@ -17,6 +17,10 @@ def pearplot(pca, targets, num_components):
     # Add the target labels to the DataFrame
     pc_data['Target'] = targets
 
-    # Create the pairplot using seaborn
-    sns.pairplot(pc_data, hue='Target', palette='plasma', diag_kind='kde')
+    # Create the pairplot using seaborn with custom plot settings for scatter points
+    sns.pairplot(pc_data, hue='Target', palette='cividis', diag_kind='kde',
+                 plot_kws={'alpha': 0.75, 'edgecolor': 'none', 's': 50})  # Adjust alpha and remove edge color
+    
+    # Save the updated plot
     plt.savefig("figures/pearplot.png")
+
