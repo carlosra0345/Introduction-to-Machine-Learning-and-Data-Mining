@@ -1,5 +1,5 @@
 from ucimlrepo import fetch_ucirepo 
-from PCA import PCA
+from project1.PCA import PCA
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.linalg import svd

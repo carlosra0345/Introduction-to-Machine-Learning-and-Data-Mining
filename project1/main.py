@@ -1,13 +1,13 @@
 from ucimlrepo import fetch_ucirepo 
-from PCA import PCA
+from project1.PCA import PCA
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.linalg import svd
-from variance_explained import*
-from variance_coef import*
-from principle_components import*
-from pearplot import*
-from multiplot import*
+from project1.variance_explained import*
+from project1.variance_coef import*
+from project1.principle_components import*
+from project1.pearplot import*
+from project1.multiplot import*
 import seaborn as sns
 import pandas as pd
 
