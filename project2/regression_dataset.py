@@ -16,5 +16,7 @@ X = data.drop(columns=['RI']).values
 
 scaler = StandardScaler()
 x_standardized = scaler.fit_transform(X)
+y = y.reshape(-1,1)
+y_standardized = scaler.fit_transform(y)
 
-X, targets = shuffle(x_standardized, y, random_state=42)
+X, targets = shuffle(x_standardized, y_standardized, random_state=42)
