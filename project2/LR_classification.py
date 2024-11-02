@@ -12,7 +12,7 @@ encoder = OneHotEncoder(sparse_output=False)
 y_encoded = encoder.fit_transform(targets.reshape(-1, 1))
 
 # Define a range of lambda values
-lambda_values = np.logspace(-4, 1, 10)  # From 0.0001 to 10
+lambda_values = np.arange(0.1, 0.6, 0.1) # From 0.0001 to 10
 cv_errors = []
 
 # K-Fold Cross-Validation
@@ -51,4 +51,4 @@ plt.xlabel('Regularization parameter λ')
 plt.ylabel('Estimated Generalization Error')
 plt.title('Generalization Error vs. λ')
 plt.grid(True)
-plt.savefig("figures/LR2.png")
+plt.savefig("project2/figures/LR2.png")
