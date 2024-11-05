@@ -85,26 +85,27 @@ def two_fold_cross_validation(attribute_matrix, target_vector, lambdas, K):
     generalization_error = np.mean(outer_errors)
     print(f'Two-Level Cross-Validation Generalization Error: {generalization_error}')
 
-X_scaled = X
-y = targets
+if __name__ == '__main__':
+    X_scaled = X
+    y = targets
 
-# Define range of lambda values
-lambdas = np.logspace(-5, 3, 10)  # From 10^-5 to 10^23 with finer granularity
+    # Define range of lambda values
+    lambdas = np.logspace(-5, 3, 10)  # From 10^-5 to 10^23 with finer granularity
 
-K = 10  # Number of folds for K-Fold cross-validation
+    K = 10  # Number of folds for K-Fold cross-validation
 
-print('1: K-Fold Cross Validation')
-print('2: Two-Level Cross Validation')
-user_input = int(input('Enter which cross validation method to use: '))
-print('----------------------------------------------')
+    print('1: K-Fold Cross Validation')
+    print('2: Two-Level Cross Validation')
+    user_input = int(input('Enter which cross validation method to use: '))
+    print('----------------------------------------------')
 
-if user_input == 1:
-    print('Performing K-Fold Cross Validation...')
-    K_Fold_cross_validation(X_scaled, y, lambdas, K)
-    print('Complete!')
-elif user_input == 2:
-    print('Performing Two-Level Cross Validation...')
-    two_fold_cross_validation(X_scaled, y, lambdas, K)
-    print('Complete!')
-else:
-    print('Error: Invalid user input')
+    if user_input == 1:
+        print('Performing K-Fold Cross Validation...')
+        K_Fold_cross_validation(X_scaled, y, lambdas, K)
+        print('Complete!')
+    elif user_input == 2:
+        print('Performing Two-Level Cross Validation...')
+        two_fold_cross_validation(X_scaled, y, lambdas, K)
+        print('Complete!')
+    else:
+        print('Error: Invalid user input')
