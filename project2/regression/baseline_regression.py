@@ -27,10 +27,7 @@ def two_fold_cross_validation_baseline(attribute_matrix, target_vector, K=10):
 if __name__ == '__main__':
     X_scaled = X
     y = targets
-
-    # Define range of lambda values
-    lambdas = np.logspace(-5, 3, 10)  # From 10^-5 to 10^23 with finer granularity
-
+    
     K = 10  # Number of folds for two-level cross-validation
 
     print('Performing Two-Level Cross Validation for Baseline Model...')
