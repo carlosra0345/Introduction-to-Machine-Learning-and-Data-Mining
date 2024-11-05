@@ -43,7 +43,7 @@ def two_fold_cross_validation_ann(attribute_matrix, target_vector, hidden_units_
         outer_errors.append(outer_error)
 
     generalization_error = np.mean(outer_errors)
-    print(f'ANN Model Generalization Error: {generalization_error}')
+    return generalization_error
     
 if __name__ == '__main__':
     X_scaled = X
@@ -53,5 +53,6 @@ if __name__ == '__main__':
     K = 10  # Number of folds for two-level cross-validation
 
     print('Performing Two-Level Cross Validation for ANN Model...')
-    two_fold_cross_validation_ann(X_scaled, y, hidden_units_range, K)
+    generalization_error = two_fold_cross_validation_ann(X_scaled, y, hidden_units_range, K)
+    print(f'ANN Model Generalization Error: {generalization_error}')
     print('Complete!')

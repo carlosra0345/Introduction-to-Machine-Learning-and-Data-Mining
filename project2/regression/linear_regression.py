@@ -83,7 +83,7 @@ def two_fold_cross_validation(attribute_matrix, target_vector, lambdas, K):
         outer_errors.append(outer_error)
 
     generalization_error = np.mean(outer_errors)
-    print(f'Two-Level Cross-Validation Generalization Error: {generalization_error}')
+    return generalization_error
 
 if __name__ == '__main__':
     X_scaled = X
@@ -105,7 +105,8 @@ if __name__ == '__main__':
         print('Complete!')
     elif user_input == 2:
         print('Performing Two-Level Cross Validation...')
-        two_fold_cross_validation(X_scaled, y, lambdas, K)
+        generalization_error = two_fold_cross_validation(X_scaled, y, lambdas, K)
+        print(f'Two-Level Cross-Validation Generalization Error: {generalization_error}')
         print('Complete!')
     else:
         print('Error: Invalid user input')
