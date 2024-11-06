@@ -17,4 +17,5 @@ N, M = X.shape
 scaler = StandardScaler()
 X = scaler.fit_transform(X)
 
-X, targets = shuffle(X, targets, random_state=42)
+X, targets = shuffle(X, targets, random_state=1000)
+
