@@ -4,9 +4,10 @@ from sklearn.metrics import mean_squared_error
 from sklearn.neural_network import MLPRegressor
 from regression_dataset import X, targets
 
-def two_fold_cross_validation_ann(attribute_matrix, target_vector, hidden_units_range, K=10):
+def two_fold_cross_validation_ann(attribute_matrix, target_vector, hidden_units_range, K=10) -> tuple:
     outer_kf = KFold(n_splits=K, shuffle=True, random_state=42)
     outer_errors = []
+    optimal_hidden_units = []
 
     for train_index, test_index in outer_kf.split(attribute_matrix):
         X_outer_train, X_outer_test = attribute_matrix[train_index], attribute_matrix[test_index]
@@ -34,6 +35,8 @@ def two_fold_cross_validation_ann(attribute_matrix, target_vector, hidden_units_
             if avg_inner_error < best_inner_error:
                 best_inner_error = avg_inner_error
                 best_hidden_units = hidden_units
+        
+        optimal_hidden_units.append(best_hidden_units)
 
         # Train the best model on the full outer training set
         best_model = MLPRegressor(hidden_layer_sizes=(best_hidden_units,), max_iter=1000, random_state=42)
@@ -43,7 +46,7 @@ def two_fold_cross_validation_ann(attribute_matrix, target_vector, hidden_units_
         outer_errors.append(outer_error)
 
     generalization_error = np.mean(outer_errors)
-    return generalization_error
+    return generalization_error, outer_errors, optimal_hidden_units
     
 if __name__ == '__main__':
     X_scaled = X
@@ -53,6 +56,6 @@ if __name__ == '__main__':
     K = 10  # Number of folds for two-level cross-validation
 
     print('Performing Two-Level Cross Validation for ANN Model...')
-    generalization_error = two_fold_cross_validation_ann(X_scaled, y, hidden_units_range, K)
+    generalization_error, _, _ = two_fold_cross_validation_ann(X_scaled, y, hidden_units_range, K)
     print(f'ANN Model Generalization Error: {generalization_error}')
     print('Complete!')
