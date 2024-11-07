@@ -112,7 +112,7 @@ if __name__ == '__main__':
     y = targets
 
     # Define range of lambda values
-    lambdas = np.logspace(-5, 3, 10)  # From 10^-5 to 10^23 with finer granularity
+    lambdas = np.logspace(-3, 0, 10)  # From 10^-3 to 1 with finer granularity
 
     K = 10  # Number of folds for K-Fold cross-validation
 
