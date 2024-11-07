@@ -34,6 +34,13 @@ def K_Fold_cross_validation(attribute_matrix, target_vector, lambdas, K=10):
         generalization_error = np.mean(fold_errors)
         generalization_errors.append(generalization_error)
 
+    min_err = float('inf')
+    optimal_lam = -100000
+    for i, error in enumerate(generalization_errors):
+        if error < min_err:
+            optimal_lam = lambdas[i]
+            min_err = error
+                
     # Plot lambda vs generalization error
     plt.figure(figsize=(10, 6))
     plt.plot(lambdas, generalization_errors, marker='o', linestyle='-')
@@ -42,7 +49,8 @@ def K_Fold_cross_validation(attribute_matrix, target_vector, lambdas, K=10):
     plt.ylabel('Average Generalization Error (MSE)')
     plt.title('Generalization Error vs. Lambda')
     plt.grid(True)
-    plt.savefig('project2/figures/linear_regression_lambda_vs_error.png')
+    plt.savefig('../figures/linear_regression_lambda_vs_error.png')
+    return optimal_lam
     
 def two_fold_cross_validation(attribute_matrix, target_vector, lambdas, K):
     outer_kf = KFold(n_splits=K, shuffle=True, random_state=42)
@@ -101,7 +109,8 @@ if __name__ == '__main__':
 
     if user_input == 1:
         print('Performing K-Fold Cross Validation...')
-        K_Fold_cross_validation(X_scaled, y, lambdas, K)
+        generalization_error = K_Fold_cross_validation(X_scaled, y, lambdas, K)
+        print(f'K-Fold Cross Validation Error: {generalization_error}')
         print('Complete!')
     elif user_input == 2:
         print('Performing Two-Level Cross Validation...')
