@@ -52,9 +52,10 @@ def K_Fold_cross_validation(attribute_matrix, target_vector, lambdas, K=10):
     plt.savefig('figures/linear_regression_lambda_vs_error.png')
     return optimal_lam
     
-def two_fold_cross_validation(attribute_matrix, target_vector, lambdas, K):
+def two_fold_cross_validation(attribute_matrix, target_vector, lambdas, K) -> tuple:
     outer_kf = KFold(n_splits=K, shuffle=True, random_state=42)
     outer_errors = []
+    optimal_lambdas = []
 
     for train_index, test_index in outer_kf.split(attribute_matrix):
         X_outer_train, X_outer_test = attribute_matrix[train_index], attribute_matrix[test_index]
@@ -89,9 +90,11 @@ def two_fold_cross_validation(attribute_matrix, target_vector, lambdas, K):
         y_outer_pred = best_model.predict(X_outer_test)
         outer_error = mean_squared_error(y_outer_test, y_outer_pred)
         outer_errors.append(outer_error)
+        
+        optimal_lambdas.append(best_lambda)
 
     generalization_error = np.mean(outer_errors)
-    return generalization_error
+    return generalization_error, outer_errors, optimal_lambdas
 
 if __name__ == '__main__':
     X_scaled = X
@@ -114,7 +117,7 @@ if __name__ == '__main__':
         print('Complete!')
     elif user_input == 2:
         print('Performing Two-Level Cross Validation...')
-        generalization_error = two_fold_cross_validation(X_scaled, y, lambdas, K)
+        generalization_error, _, _ = two_fold_cross_validation(X_scaled, y, lambdas, K)
         print(f'Two-Level Cross-Validation Generalization Error: {generalization_error}')
         print('Complete!')
     else:
