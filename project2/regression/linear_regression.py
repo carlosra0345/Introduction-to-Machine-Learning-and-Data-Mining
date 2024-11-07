@@ -8,12 +8,14 @@ from regression_dataset import X, targets
 def K_Fold_cross_validation(attribute_matrix, target_vector, lambdas, K=10):
     kf = KFold(n_splits=K, shuffle=True, random_state=42)
 
-    generalization_errors = []  # Store generalization error for each lambda
+    training_errors = []  # Store training error for each lambda
+    generalization_errors = []  # Store testing error for each lambda
 
     # Loop over each lambda value
     for lam in lambdas:
         model = Ridge(alpha=lam)
-        fold_errors = []  # Store errors for each fold
+        fold_train_errors = []  # Store training errors for each fold
+        fold_test_errors = []  # Store test errors for each fold
         
         # Perform K-Fold cross-validation
         for train_index, test_index in kf.split(attribute_matrix):
@@ -23,33 +25,42 @@ def K_Fold_cross_validation(attribute_matrix, target_vector, lambdas, K=10):
             # Train the model on the training set
             model.fit(X_train, y_train)
             
+            # Predict on the training set
+            y_train_pred = model.predict(X_train)
             # Predict on the test set
-            y_pred = model.predict(X_test)
+            y_test_pred = model.predict(X_test)
+            
+            # Calculate the training error (Mean Squared Error) for this fold
+            train_error = mean_squared_error(y_train, y_train_pred)
+            fold_train_errors.append(train_error)
             
             # Calculate the test error (Mean Squared Error) for this fold
-            fold_error = mean_squared_error(y_test, y_pred)
-            fold_errors.append(fold_error)
+            test_error = mean_squared_error(y_test, y_test_pred)
+            fold_test_errors.append(test_error)
         
-        # Calculate the average generalization error for this lambda
-        generalization_error = np.mean(fold_errors)
-        generalization_errors.append(generalization_error)
+        # Calculate the average training error and testing error for this lambda
+        avg_train_error = np.mean(fold_train_errors)
+        avg_test_error = np.mean(fold_test_errors)
+        
+        training_errors.append(avg_train_error)
+        generalization_errors.append(avg_test_error)
 
-    min_err = float('inf')
-    optimal_lam = -100000
-    for i, error in enumerate(generalization_errors):
-        if error < min_err:
-            optimal_lam = lambdas[i]
-            min_err = error
-                
-    # Plot lambda vs generalization error
+    # Find the optimal lambda value based on the testing error
+    optimal_lam = lambdas[np.argmin(generalization_errors)]
+    
+    # Plot lambda vs errors
     plt.figure(figsize=(10, 6))
-    plt.plot(lambdas, generalization_errors, marker='o', linestyle='-')
+    plt.plot(lambdas, training_errors, marker='o', linestyle='-', label='Training Error')
+    plt.plot(lambdas, generalization_errors, marker='o', linestyle='-', label='Testing Error')
     plt.xscale('log')
     plt.xlabel('Lambda (Regularization Parameter)')
-    plt.ylabel('Average Generalization Error (MSE)')
-    plt.title('Generalization Error vs. Lambda')
+    plt.ylabel('Mean Squared Error (MSE)')
+    plt.title('Training and Testing Errors vs. Lambda')
+    plt.legend()
     plt.grid(True)
     plt.savefig('figures/linear_regression_lambda_vs_error.png')
+    plt.show()
+
     return optimal_lam
     
 def two_fold_cross_validation(attribute_matrix, target_vector, lambdas, K) -> tuple:
