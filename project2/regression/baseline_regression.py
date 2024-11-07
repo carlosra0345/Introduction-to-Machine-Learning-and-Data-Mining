@@ -9,7 +9,7 @@ def baseline_model(train_target, test_size):
     mean_value = np.mean(train_target)
     return np.full(test_size, mean_value)
 
-def two_fold_cross_validation_baseline(attribute_matrix, target_vector, K=10):
+def two_fold_cross_validation_baseline(attribute_matrix, target_vector, K=10) -> tuple:
     outer_kf = KFold(n_splits=K, shuffle=True, random_state=42)
     outer_errors = []
 
@@ -22,7 +22,7 @@ def two_fold_cross_validation_baseline(attribute_matrix, target_vector, K=10):
         outer_errors.append(outer_error)
 
     generalization_error = np.mean(outer_errors)
-    return generalization_error
+    return generalization_error, outer_errors
 
 if __name__ == '__main__':
     X_scaled = X
@@ -31,6 +31,6 @@ if __name__ == '__main__':
     K = 10  # Number of folds for two-level cross-validation
 
     print('Performing Two-Level Cross Validation for Baseline Model...')
-    generalization_error = two_fold_cross_validation_baseline(X_scaled, y, K)
+    generalization_error, _ = two_fold_cross_validation_baseline(X_scaled, y, K)
     print(f'Baseline Model Generalization Error: {generalization_error}')
     print('Complete!')
