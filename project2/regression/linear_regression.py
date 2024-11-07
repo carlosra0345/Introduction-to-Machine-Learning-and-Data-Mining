@@ -49,7 +49,7 @@ def K_Fold_cross_validation(attribute_matrix, target_vector, lambdas, K=10):
     plt.ylabel('Average Generalization Error (MSE)')
     plt.title('Generalization Error vs. Lambda')
     plt.grid(True)
-    plt.savefig('../figures/linear_regression_lambda_vs_error.png')
+    plt.savefig('figures/linear_regression_lambda_vs_error.png')
     return optimal_lam
     
 def two_fold_cross_validation(attribute_matrix, target_vector, lambdas, K):
