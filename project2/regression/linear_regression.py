@@ -4,6 +4,7 @@ from sklearn.linear_model import Ridge
 from sklearn.model_selection import KFold
 from sklearn.metrics import mean_squared_error
 from regression_dataset import X, targets
+import pandas as pd
 
 def K_Fold_cross_validation(attribute_matrix, target_vector, lambdas, K=10):
     kf = KFold(n_splits=K, shuffle=True, random_state=42)
@@ -60,7 +61,31 @@ def K_Fold_cross_validation(attribute_matrix, target_vector, lambdas, K=10):
     plt.grid(True)
     plt.savefig('figures/linear_regression_lambda_vs_error.png')
     plt.show()
-
+    
+    # train the model on the full dataset using the optimal lambda
+    final_model = Ridge(alpha=optimal_lam)
+    final_model.fit(attribute_matrix, target_vector)
+    feature_names = [
+        'Na',
+        'Mg',
+        'Al',
+        'Si',
+        'K',
+        'Ca',
+        'Ba',
+        'Fe'
+    ]
+    weights = final_model.coef_
+    weights = weights.flatten()
+    
+    feature_weights_df = pd.DataFrame({
+        'Feature': feature_names,
+        'Weight': weights
+    })
+    
+    print('\nFeature Weights Table:')
+    print(feature_weights_df.to_string(index=False))
+    
     return optimal_lam
     
 def two_fold_cross_validation(attribute_matrix, target_vector, lambdas, K) -> tuple:
@@ -124,7 +149,7 @@ if __name__ == '__main__':
     if user_input == 1:
         print('Performing K-Fold Cross Validation...')
         generalization_error = K_Fold_cross_validation(X_scaled, y, lambdas, K)
-        print(f'K-Fold Cross Validation Error: {generalization_error}')
+        print(f'\nK-Fold Cross Validation Error: {generalization_error}')
         print('Complete!')
     elif user_input == 2:
         print('Performing Two-Level Cross Validation...')
